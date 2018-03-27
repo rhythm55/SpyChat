@@ -17,10 +17,10 @@ while(show_menu):
     # menu_choices
     print(" 1.Add a status update \n 2.Add a friend \n 3.Send a secret message \n 4.Read a secret message \n 5.Read chat from a user \n 6.Close application ")
     menu_choice= int(input("enter your choice: "))
-    if menu_choice==1:
+    if menu_choice == 1:
         menu.spy_status()
-    if menu_choice==6:
-        show_menu=False
+    if menu_choice == 6:
+        show_menu = False
 
 
 
