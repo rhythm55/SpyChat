@@ -1,7 +1,8 @@
+# data structure to hold list of spy's statuses
 status_messages = []
 
 # function add and update status of spy
-def spy_status():
+def spy_status(user):
     current_status_message = None
     show_menu=True
     while(show_menu):
@@ -11,7 +12,8 @@ def spy_status():
         if menu_choice == 1:
             print("you choose to add a status")
             current_status_message=add_status(current_status_message)
-            print("your status is : "+current_status_message)
+            # user[0] is name of current spy
+            print(user[0]+" status is : "+current_status_message)
         else:
             show_menu = False
 
@@ -73,6 +75,7 @@ def add_friend(user):
     f_rating = float(input("spy rating?"))
     f_is_online = input("online status? ")
 
+    # user[1] is rating of current spy
     if len(f_name) > 0 and f_age > 12 and f_rating > user[1]:
         friends_name.append(f_name)
         friends_age.append(f_age)
