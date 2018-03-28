@@ -1,9 +1,11 @@
 # details of default spy
-spy_name = "rhythm"
-spy_salutation = "Ms"
-spy_age = 20
-spy_experience = 5
-spy_rating = 4.7
+def default_spy():
+    spy_name = "rhythm"
+    spy_salutation = "Ms"
+    spy_age = 20
+    spy_experience = 5
+    spy_rating = 4.7
+    detail(spy_name, spy_salutation, spy_age, spy_experience, spy_rating)
 
 # detail function is to display details of a spy
 def detail(spy_name, spy_salutation, spy_age, spy_experience, spy_rating):
@@ -16,7 +18,7 @@ def new_spy():
         spy_salutation = input("what should we call you " + spy_name + " (Mr. or Ms.)? ")
         print("Glad to have you here " + spy_salutation + "." + spy_name)
         print("Alright " + spy_salutation + "." + spy_name + " We would like to know a little bit more about you...")
-        # checking wether age of spy is valid or not
+        # checking weather age of spy is valid or not
         spy_age = int(input("what is your age? "))
         if spy_age < 18 or spy_age > 60:
             print("sorry! your age is not valid to be a spy")
@@ -39,4 +41,4 @@ def new_spy():
             detail(spy_name, spy_salutation, spy_age, spy_experience, spy_rating)
     else:
         print("please enter a valid name")
-        exit()
+        new_spy()
