@@ -55,21 +55,25 @@ def add_status(current_status_message):
     # function will return current message updated from cases accordingly
     return current_status_message
 
-friends_name = []
-friends_age = []
-friends_rating = []
-friends_is_online = []
-import spy_details
 
-def add_friend():
+
+
+def add_friend(user):
+    # data structure to hold friend info of spy
+    friends_name = []
+    friends_age = []
+    friends_rating = []
+    friends_is_online = []
+
+    # details of friend
     f_name = input("enter your friend's name: ")
     f_salu = input(f_name+"'s salutation? ")
     f_name = f_salu + "." + f_name
     f_age = int(input("age? "))
-    f_rating = int(input("spy rating?"))
+    f_rating = float(input("spy rating?"))
     f_is_online = input("online status? ")
 
-    if len(f_name) > 0 and f_age > 12:
+    if len(f_name) > 0 and f_age > 12 and f_rating > user[1]:
         friends_name.append(f_name)
         friends_age.append(f_age)
         friends_rating.append(f_rating)
@@ -77,5 +81,7 @@ def add_friend():
         print(f_name+" added successfully as your friend")
     else:
         print("sorry! invalid entry. We can't add spy with details you provided")
+
+    # return no of friend spy have
     return len(friends_name)
 
