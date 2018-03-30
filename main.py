@@ -1,10 +1,10 @@
 print("Welcome to SpyChat")
-import spy_details
+from spy_details import spy
 import menu
 
 # default user or new user
 user = input("you want to continue as default user or create your account : ")
-user = spy_details.spy(user)
+user = spy(user)
 # user contains the current spy name and rating
 
 # Menu of SpyChat

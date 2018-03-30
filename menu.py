@@ -62,29 +62,26 @@ def add_status(current_status_message):
 
 def add_friend(user):
     # data structure to hold friend info of spy
-    friends_name = []
-    friends_age = []
-    friends_rating = []
-    friends_is_online = []
+    friends = []
+    new_friend = {}
 
     # details of friend
-    f_name = input("enter your friend's name: ")
-    f_salu = input(f_name+"'s salutation? ")
-    f_name = f_salu + "." + f_name
-    f_age = int(input("age? "))
-    f_rating = float(input("spy rating?"))
-    f_is_online = input("online status? ")
+    new_friend['name'] = input("enter your friend's name: ")
+    f_salu = input(new_friend['name']+"'s salutation? ")
+    new_friend['name'] = f_salu + "." + new_friend['name']
+    new_friend['age'] = int(input("age? "))
+    new_friend['rating'] = float(input("spy rating?"))
+    new_friend['is_online'] = input("online status? ")
+    #
+    friends.append(new_friend)
 
     # user[1] is rating of current spy
-    if len(f_name) > 0 and f_age > 12 and f_rating > user[1]:
-        friends_name.append(f_name)
-        friends_age.append(f_age)
-        friends_rating.append(f_rating)
-        friends_is_online.append(f_is_online)
-        print(f_name+" added successfully as your friend")
+    if len(new_friend['name']) > 0 and new_friend['age'] > 12 and new_friend['rating'] > user[1]:
+
+        print(new_friend['name']+" added successfully as your friend")
     else:
         print("sorry! invalid entry. We can't add spy with details you provided")
 
     # return no of friend spy have
-    return len(friends_name)
+    return len(friends)
 

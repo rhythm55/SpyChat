@@ -2,36 +2,39 @@
 def spy(user):
     # details of default spy
     if user == 'default':
-        spy_name = "Ms.rhythm"
-        spy_age = 20
-        spy_experience = 5
-        spy_rating = 4.7
+        spy = {
+            'name': 'Ms.rhythm',
+            'age': 20,
+            'experience': 5,
+            'rating': 4.7
+             }
 
     # fetching details from new spy
     else:
-        spy_name = input("Enter your spy name: ")
-        if len(spy_name) > 0:
-            spy_salutation = input("what should we call you " + spy_name + " (Mr. or Ms.)? ")
-            spy_name = spy_salutation + "." + spy_name
-            print("Glad to have you here " + spy_name)
+        spy = {}
+        spy['name'] = input("Enter your spy name: ")
+        if len(spy['name']) > 0:
+            spy_salutation = input("what should we call you " + spy['name'] + " (Mr. or Ms.)? ")
+            spy['name'] = spy_salutation + "." + spy['name']
+            print("Glad to have you here " + spy['name'])
             print(
-                "Alright " + spy_name + " We would like to know a little bit more about you...")
+                "Alright " + spy['name'] + " We would like to know a little bit more about you...")
 
             # checking weather age of spy is valid or not
-            spy_age = int(input("what is your age? "))
-            if spy_age < 18 or spy_age > 60:
+            spy['age'] = int(input("what is your age? "))
+            if spy['age'] < 18 or spy['age'] > 60:
                 print("sorry! your age is not valid to be a spy")
                 exit()
             else:
-                spy_experience = int(input("for how many years you are working as a spy? "))
-                spy_rating = float(input("what is your rating(out of 5)? "))
+                spy['experience'] = int(input("for how many years you are working as a spy? "))
+                spy['rating'] = float(input("what is your rating(out of 5)? "))
 
                 # comments according to the rating of spy
-                if spy_rating >= 4.5:
+                if spy['rating'] >= 4.5:
                     print("good ace!")
-                elif spy_rating < 4.5 and spy_rating >= 3.5:
+                elif spy['rating'] < 4.5 and spy['rating'] >= 3.5:
                     print("you are one of good ones!")
-                elif spy_rating < 3.5 and spy_rating >= 2.5:
+                elif spy['rating'] < 3.5 and spy['rating'] >= 2.5:
                     print("you can always do better!")
                 else:
                     print("we can always you somebody to help in the office")
@@ -44,6 +47,6 @@ def spy(user):
             spy(user)
 
     # displaying details of default/new spy
-    print("%s %d year old with a handful experience of %d years and a rating of %.2f" % (spy_name, spy_age, spy_experience, spy_rating))
-    return spy_name, spy_rating
+    print("%s %d year old with a handful experience of %d years and a rating of %.2f" % (spy['name'], spy['age'], spy['experience'], spy['rating']))
+    return spy['name'], spy['rating']
 
