@@ -22,6 +22,9 @@ while(show_menu):
         e = menu.add_friend(user)
         # e stores no of friends of spy
         print("your no of friends: " + str(e))
+    elif menu_choice == 3:
+       a = menu.select_a_friend()
+       print(a)
     if menu_choice == 6:
         show_menu = False
 

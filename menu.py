@@ -57,13 +57,16 @@ def add_status(current_status_message):
     # function will return current message updated from cases accordingly
     return current_status_message
 
-
+# data structure to hold friend info of spy
+friends = []
+new_friend = {
+    'name': '',
+    'age': 0,
+    'rating': 0.0
+}
 
 
 def add_friend(user):
-    # data structure to hold friend info of spy
-    friends = []
-    new_friend = {}
 
     # details of friend
     new_friend['name'] = input("enter your friend's name: ")
@@ -73,7 +76,7 @@ def add_friend(user):
     new_friend['rating'] = float(input("spy rating?"))
     new_friend['is_online'] = input("online status? ")
     #
-    friends.append(new_friend)
+    friends.append(new_friend.copy())
 
     # user[1] is rating of current spy
     if len(new_friend['name']) > 0 and new_friend['age'] > 12 and new_friend['rating'] > user[1]:
@@ -84,4 +87,18 @@ def add_friend(user):
 
     # return no of friend spy have
     return len(friends)
+
+# it will select a one out of list of friends
+def select_a_friend():
+    i = 0
+    # displaying list of friends
+    print("list of your friends:")
+    for friend in friends:
+        i = i + 1
+        print("%d.%s" % (i, friend['name']))
+    index = int(input("enter sr.no of friend you want to select "))
+    index = index-1
+    return index
+
+
 

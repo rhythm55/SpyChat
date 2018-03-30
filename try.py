@@ -1,18 +1,20 @@
 friends = []
 new_friend = {
-    'name': 'rhythm',
-    'age': 20
+    'name': '',
+    'age': 0
 }
-friends.append(new_friend)
 
-new_friend = {
-    'name': 'pankhi',
-    'age': 21
-}
-friends.append(new_friend)
+new_friend['name']=input("name")
+new_friend['age']= input("age")
+friends.append(new_friend.copy())
 
+new_friend['name']=input("name")
+new_friend['age']= input("age")
+friends.append(new_friend.copy())
 
-# print(new_friend['name'])
-print(friends[1]['name'])
+i=0
+for friend in friends:
+    i=i+1
+    print("%d.%s"%(i,friend['name']))
 
 
