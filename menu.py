@@ -74,13 +74,11 @@ def add_friend(user):
     new_friend['name'] = f_salu + "." + new_friend['name']
     new_friend['age'] = int(input("age? "))
     new_friend['rating'] = float(input("spy rating?"))
-    new_friend['is_online'] = input("online status? ")
-    #
-    friends.append(new_friend.copy())
+    new_friend['is_online'] = input("online status(online/offline)? ")
 
     # user[1] is rating of current spy
     if len(new_friend['name']) > 0 and new_friend['age'] > 12 and new_friend['rating'] > user[1]:
-
+        friends.append(new_friend.copy())
         print(new_friend['name']+" added successfully as your friend")
     else:
         print("sorry! invalid entry. We can't add spy with details you provided")
@@ -99,6 +97,12 @@ def select_a_friend():
     index = int(input("enter sr.no of friend you want to select "))
     index = index-1
     return index
+
+def send_a_message():
+    print("which friend you want to communicate with?")
+    index = select_a_friend()
+    print("you want to message %s with rating %.2f"%(friends[index]['name'], friends[index]['rating']))
+    # -----------------
 
 
 
