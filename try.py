@@ -1,20 +1,26 @@
-friends = []
+from datetime import datetime
+friend = []
 new_friend = {
     'name': '',
-    'age': 0
+    'chats' : ''
 }
 
-new_friend['name']=input("name")
-new_friend['age']= input("age")
-friends.append(new_friend.copy())
+new_friend = {
+'name': 'pankhi',
+'chats':{}
 
-new_friend['name']=input("name")
-new_friend['age']= input("age")
-friends.append(new_friend.copy())
+}
+friend.append(new_friend)
 
-i=0
-for friend in friends:
-    i=i+1
-    print("%d.%s"%(i,friend['name']))
+sender=0
+new_chat = {
+    "message": "hey",
+    "time": datetime.now(),
+    "sent_by_me": False
+  }
+
+friend[sender]['chats']=new_chat
+
+print (friend[sender]['chats']['message'])
 
 

@@ -12,22 +12,21 @@ def spy(user):
     # fetching details from new spy
     else:
         spy = {}
-        spy['name'] = input("Enter your spy name: ")
+        spy['name'] = raw_input("Enter your spy name: ")
         if len(spy['name']) > 0:
-            spy_salutation = input("what should we call you " + spy['name'] + " (Mr. or Ms.)? ")
+            spy_salutation = raw_input("what should we call you " + spy['name'] + " (Mr. or Ms.)? ")
             spy['name'] = spy_salutation + "." + spy['name']
             print("Glad to have you here " + spy['name'])
-            print(
-                "Alright " + spy['name'] + " We would like to know a little bit more about you...")
+            print("Alright " + spy['name'] + " We would like to know a little bit more about you...")
 
             # checking weather age of spy is valid or not
-            spy['age'] = int(input("what is your age? "))
+            spy['age'] = int(raw_input("what is your age? "))
             if spy['age'] < 18 or spy['age'] > 60:
                 print("sorry! your age is not valid to be a spy")
                 exit()
             else:
-                spy['experience'] = int(input("for how many years you are working as a spy? "))
-                spy['rating'] = float(input("what is your rating(out of 5)? "))
+                spy['experience'] = int(raw_input("for how many years you are working as a spy? "))
+                spy['rating'] = float(raw_input("what is your rating(out of 5)? "))
 
                 # comments according to the rating of spy
                 if spy['rating'] >= 4.5:

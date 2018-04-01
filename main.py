@@ -3,7 +3,7 @@ from spy_details import spy
 import menu
 
 # default user or new user
-user = input("you want to continue as default user or create your account : ")
+user = raw_input("you want to continue as default user or create your account : ")
 user = spy(user)
 # user contains the current spy name and rating
 
@@ -24,6 +24,8 @@ while(show_menu):
         print("your no of friends: " + str(e))
     elif menu_choice == 3:
        menu.send_a_message()
+    elif menu_choice == 4:
+        menu.read_a_message()
     if menu_choice == 6:
         show_menu = False
 
