@@ -1,26 +1,11 @@
-from datetime import datetime
-friend = []
-new_friend = {
-    'name': '',
-    'chats' : ''
-}
+class Spy:
+    def __init__(self, name, salutation, age, experience, rating):
+        self.name = name + salutation
+        self.age = age
+        self.experience = experience
+        self.rating = rating
 
-new_friend = {
-'name': 'pankhi',
-'chats':{}
-
-}
-friend.append(new_friend)
-
-sender=0
-new_chat = {
-    "message": "hey",
-    "time": datetime.now(),
-    "sent_by_me": False
-  }
-
-friend[sender]['chats']=new_chat
-
-print (friend[sender]['chats']['message'])
-
-
+spy = Spy('rhythm', 'Ms', 21, 3, 4)
+li = []
+li.append(spy)
+print li(spy)

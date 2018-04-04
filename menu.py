@@ -1,10 +1,11 @@
 from datetime import datetime
+from spy_details import ChatMessage,Spy,friends,ChatMessage
 
 # data structure to hold list of spy's statuses
 status_messages = []
 
 # function add and update status of spy
-def spy_status(user):
+def spy_status(spy):
     current_status_message = None
     show_menu=True
     while(show_menu):
@@ -13,9 +14,8 @@ def spy_status(user):
         menu_choice = int(raw_input("enter your choice: "))
         if menu_choice == 1:
             print("you choose to add a status")
-            current_status_message=add_status(current_status_message)
-            # user[0] is name of current spy
-            print(user[0]+" status is : "+current_status_message)
+            spy.current_status_message = add_status(spy.current_status_message)
+            print(spy.name + " status is : " + spy.current_status_message)
         else:
             show_menu = False
 
@@ -23,7 +23,7 @@ def add_status(current_status_message):
 
     # user already have a status
     if current_status_message != None:
-        print("your current status message is: "+current_status_message)
+        print("your current status message is: " + current_status_message)
         default = raw_input("Do you want to select from the older status (Y/N)? ")
         # user want to add new status
         if default.upper() == 'N':
@@ -59,30 +59,20 @@ def add_status(current_status_message):
     # function will return current message updated from cases accordingly
     return current_status_message
 
-# data structure to hold friend info of spy
-friends = []
-new_friend = {
-    'name': '',
-    'age': 0,
-    'rating': 0.0,
-    'chats' : ''
-}
 
-
-def add_friend(user):
+def add_friend(spy):
 
     # details of friend
-    new_friend['name'] = raw_input("enter your friend's name: ")
-    f_salu = raw_input(new_friend['name']+"'s salutation? ")
-    new_friend['name'] = f_salu + "." + new_friend['name']
-    new_friend['age'] = int(raw_input("age? "))
-    new_friend['rating'] = float(raw_input("spy rating?"))
-    new_friend['is_online'] = raw_input("online status(online/offline)? ")
+    name = raw_input("enter your friend's name: ")
+    salutation = raw_input(name + "'s salutation? ")
+    age = int(raw_input("age? "))
+    experience = int(raw_input("experience ?"))
+    rating = float(raw_input("spy rating?"))
 
-    # user[1] is rating of current spy
-    if len(new_friend['name']) > 0 and new_friend['age'] > 12 and new_friend['rating'] > user[1]:
-        friends.append(new_friend.copy())
-        print(new_friend['name']+" added successfully as your friend")
+    if len(name) > 0 and age > 12 and age > spy.rating:
+        new_friend = Spy(name, salutation, age, experience, rating)
+        friends.append(new_friend)
+        print(name+" added successfully as your friend")
     else:
         print("sorry! invalid entry. We can't add spy with details you provided")
 
@@ -94,9 +84,9 @@ def select_a_friend():
     i = 0
     # displaying list of friends of user
     print("list of your friends:")
-    for friend in friends:
-        i = i + 1
-        print("%d.%s" % (i, friend['name']))
+    for friend in friends:  # fetching friends from friends list created in spy_details
+        item_number = 0
+        print '%d. %s aged %d with rating %.2f is online' % (item_number + 1, friend.name, friend.age, friend.rating)
     index = int(raw_input("enter serial.no of friend you want to select "))
     # index will store index no of selected friend in friends list
     return index - 1
@@ -109,22 +99,14 @@ def send_a_message():
     print("which friend you want to communicate with?")
     selected_friend = select_a_friend()
     # selected_friend contains index of friend selected via select_a_friend function
-    print("you want to message %s with rating %.2f"%(friends[selected_friend]['name'], friends[selected_friend]['rating']))
     original_image = raw_input("enter name of image you want to encode secret message with: ")
     output_path = 'output.jpg'
     text = raw_input("enter secret message you want to hide: ")
     Steganography.encode(original_image, output_path, text)
     # encode method of Steganography library will hide secrete message in selected image
 
-    # new_chat dictionary will keep record of all the chats of user
-    new_chat = {
-        'message' : text,
-        'time' : datetime.now,
-        'message_by_me' : True
-    }
-    friends[selected_friend]['chats'] = new_chat
-    # chats is a key of dictionary friend in list friends
-    print (friends[selected_friend]['chats'])
+    new_chat = ChatMessage(text, True)  # calling Chat class
+    friends[selected_friend].chats.append(new_chat)  # appending in chats in friends list
     print("your secret message is ready")
 
 def read_a_message():
@@ -134,12 +116,6 @@ def read_a_message():
     secret_text = Steganography.decode(output_path)
     # decode method of Steganography library will retrieve hidden secrete message in selected image
     print("your recieved text is: " + secret_text )
-
-    # new_chat dictionary will keep record of all the chats of user
-    new_chat = {
-        'message': secret_text,
-        'time': datetime.now,
-        'message_by_me': False
-    }
-    friends[sender]['chats'] = new_chat
-    print("your secret message is : "+friends[sender]['chats']['message'])
+    new_chat = ChatMessage(secret_text, True)  # calling Chat class
+    friends[sender].chats.append(new_chat)  # appending in chats in friends list
+    
