@@ -1,18 +1,23 @@
-from spy_details import Spy
+from spy_details import Spy,friends, ChatMessage,chats
+import csv
 import menu
+from termcolor import colored
 
-print("Welcome to SpyChat")
+print colored("Welcome to SpyChat", 'cyan', attrs=['bold'])
 
-# default user or new user
-user = raw_input("you want to continue as default user or create your account : ")
+# default spy or new spy
+user = raw_input(colored("you want to continue as default user or create your account : ", "yellow"))
 
-if user=='default':
-    spy = Spy('rhythm', 'Ms', 21, 3, 4)
+if user == 'default':
+    spy = Spy('Ms.rhythm', 21, 3, 4)
+    # display function in spy_details displays information about spy
+    spy.display_info('Ms.rhythm', 21, 3, 4)
 else:
     # fetching details from new spy
     name = raw_input("Enter your spy name: ")
     if len(name) > 0:
         salutation = raw_input("what should we call you " + name + " (Mr. or Ms.)? ")
+        name = salutation + "." + name
         print("Glad to have you here " + name)
         print("Alright " + name + " We would like to know a little bit more about you...")
 
@@ -36,37 +41,74 @@ else:
                 print("we can always you somebody to help in the office")
 
             print("thanks for telling the information about you...")
-            spy = Spy(name, salutation, age, experience, rating)
-# user contains the current spy name and rating
+            spy = Spy(name, age, experience, rating)
+            # display function in spy_details displays information about spy
+            spy.display_info(name, age, experience, rating)
     else:
+        # if enter key is pressed it will be considered as invalid
         print("please enter a valid name")
         exit()
 
 
+# ------- start chat -----
+def start_chat():
+    # load_friends() is a function which loads all the friends stored in friends.csv
+    def load_friends():
+        with open('friends.csv', 'rU') as friends_data:
+            reader = csv.reader(friends_data)
+            for row in reader:
+                try:
+                    friends.append(Spy(name=row[0], age=int(row[1]), experience=int(row[2]), rating=float(row[3])))
+                except IndexError:
+                    pass
+                continue
 
-# Menu of SpyChat
-show_menu = True
-while(show_menu):
-    print("----- MENU -----")
-    # menu_choices:
-    print(" 1.Add a status update \n 2.Add a friend \n 3.Send a secret message \n 4.Read a secret message \n 5.Read chat from a user \n 6.Close application ")
-    menu_choice = int(input("enter your choice: "))
-    if menu_choice == 1:
-        # passed user to provide info of current spy
-        menu.spy_status(spy)
-    elif menu_choice == 2:
-        # passed user to provide rating of spy
-        e = menu.add_friend(spy)
-        # e stores no of friends of spy
-        print("your no of friends: " + str(e))
-    elif menu_choice == 3:
-        menu.send_a_message()
-    elif menu_choice == 4:
-        menu.read_a_message()
-    if menu_choice == 6:
-        show_menu = False
+    # load_chats() is a function which loads all the chats of spies stored in chats.csv
+    def load_chats():
+        with open("chats.csv", 'rU') as chat:
+            reader = csv.reader(chat)
+            for row in reader:
+                try:
+                    chats.append(ChatMessage(spy_name=row[0], friend_name=row[1], time=row[2], message=row[3]))
+                except IndexError:
+                    pass
+                continue
+
+    # both functions are called so that chats and list of friends are loaded before its usage
+    load_friends()
+    load_chats()
+
+    # Menu of SpyChat
+    show_menu = True
+    while(show_menu):
+        print("----- MENU -----")
+        # menu_choices:
+        print colored(" 1.Add a status update \n 2.Add a friend \n 3.Send a secret message \n 4.Read a secret message \n 5.Read chat from a user \n 6.Close application", "cyan")
+        menu_choice = int(input("enter your choice: "))
+        if menu_choice == 1:
+            # passed current spy to provide info of current spy
+            menu.spy_status(spy)
+        elif menu_choice == 2:
+            # passed current spy to provide rating of spy
+            e = menu.add_friend(spy)
+            # e stores no of friends of spy
+            print colored("your no of friends: " + str(e), "blue")
+        elif menu_choice == 3:
+            # passed current spy to provide rating of spy
+            menu.send_a_message(spy)
+        elif menu_choice == 4:
+            # passed current spy to provide rating of spy
+            menu.read_a_message(spy)
+        elif menu_choice == 5:
+            # no_chat stores value returned by read_chat if there exist a chat no_chat will be 1
+            no_chat = menu.read_chat(spy)
+            if no_chat != 1:
+                print colored("no messages exchanged yet", "red")
+        if menu_choice == 6:
+            # when show_menu value become false it will exit from while loop
+            show_menu = False
 
 
-
-
+# calling the start_chat() function that includes menu and loads friends from friends.csv and chats from chat.csv
+start_chat()
 
