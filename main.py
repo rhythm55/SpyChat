@@ -69,7 +69,7 @@ def start_chat():
             reader = csv.reader(chat)
             for row in reader:
                 try:
-                    chats.append(ChatMessage(spy_name=row[0], friend_name=row[1], time=row[2], message=row[3]))
+                    chats.append(ChatMessage(sent_by_me=row[0], friend_name=row[1], time=row[2], message=row[3]))
                 except IndexError:
                     pass
                 continue
@@ -83,7 +83,7 @@ def start_chat():
     while(show_menu):
         print("----- MENU -----")
         # menu_choices:
-        print colored(" 1.Add a status update \n 2.Add a friend \n 3.Send a secret message \n 4.Read a secret message \n 5.Read chat from a user \n 6.Close application", "cyan")
+        print colored(" 1.Add a status update \n 2.Add a friend \n 3.Send a secret message \n 4.Read a secret message \n 5.Read chat from a user \n 6.Close application", "yellow")
         menu_choice = int(input("enter your choice: "))
         if menu_choice == 1:
             # passed current spy to provide info of current spy

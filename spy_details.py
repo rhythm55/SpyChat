@@ -16,14 +16,14 @@ class Spy:
 
 # chats between spies
 class ChatMessage:
-        def __init__(self, spy_name, friend_name, time, message):
-            self.spy_name = spy_name
+        def __init__(self, sent_by_me, friend_name, time, message):
+            self.sent_by_me = sent_by_me
             self.friend_name = friend_name
             self.time = time
             self.message = message
 
-friends = []
 # list stores friend of a spy
+friends = []
 
-chats = []
 # list store chats between a spy and his/her friends
+chats = []

@@ -12,7 +12,7 @@ status_messages = ["at work", "busy don't disturb"]
 def spy_status(spy):
     current_status_message = None
     show_menu = True
-    while(show_menu):
+    while show_menu:
         # menu_choices
         print("What do you want to do? \n1.Add \ update status \n2.close application")
         menu_choice = int(raw_input(colored("enter your choice: ", "yellow")))
@@ -122,12 +122,12 @@ def send_a_message(spy):
             # encode method of Steganography library will hide secrete message in selected image
             Steganography.encode(original_image, output_path, text)
             # storing chats in chatmessage
-            chat = ChatMessage(spy_name=spy.name, friend_name=selected_friend, time=datetime.now().strftime("%d %B %Y"), message=text)
+            chat = ChatMessage(sent_by_me=True, friend_name=selected_friend, time=datetime.now().strftime("%d %B %Y"), message=text)
             chats.append(chat)
             # writing chats in chats.csv
             with open("chats.csv", 'a') as chat_record:
                 writer = csv.writer(chat_record)
-                writer.writerow([chat.spy_name, chat.friend_name, chat.time, chat.message])
+                writer.writerow([chat.sent_by_me, chat.friend_name, chat.time, chat.message])
             print colored("your secret message is ready", "blue")
         else:
             print colored("file not in .jpg format", "red")
@@ -148,12 +148,12 @@ def read_a_message(spy):
             if text in special_text:
                 print colored("don't worry " + sender + "on the way to rescue you!!!", "green", attrs=['bold'])
             # storing chats in chatmessage
-            chat = ChatMessage(spy_name=spy.name, friend_name=sender, time=datetime.now().strftime("%d %B %Y"), message=text)
+            chat = ChatMessage(sent_by_me=False, friend_name=sender, time=datetime.now().strftime("%d %B %Y"), message=text)
             chats.append(chat)
             # writing chats in chats.csv
             with open("chats.csv", 'a') as chat_record:
                 writer = csv.writer(chat_record)
-                writer.writerow([chat.spy_name, chat.friend_name, chat.time, chat.message])
+                writer.writerow([chat.sent_by_me, chat.friend_name, chat.time, chat.message])
         else:
             print colored("file not in .jpg format", "red")
     else:
@@ -168,10 +168,11 @@ def read_chat(spy):
         reader = csv.reader(chat)
         for row in reader:
             try:
-                c = ChatMessage(spy_name=row[0], friend_name=row[1], time=row[2], message=row[3])
+                c = ChatMessage(sent_by_me=row[0], friend_name=row[1], time=row[2], message=row[3])
                 # checking the chats of the current spy with selected friend
-                if c.spy_name == spy.name and c.friend_name == selected_friend:
-                    print colored("You sent message to %s on [%s] : %s"%(selected_friend, c.time, c.message), "blue")
+                # print c.sent_by_me
+                if c.sent_by_me and c.friend_name == selected_friend:
+                    print colored("You sent message to %s on [%s] : %s" % (selected_friend, c.time, c.message), "blue")
                     return 1
             except IndexError:
                 pass
