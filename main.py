@@ -1,53 +1,109 @@
-from spy_details import Spy,friends, ChatMessage,chats
+from spy_details import Spy,friends, ChatMessage,chats,Friend
 import csv
 import menu
 from termcolor import colored
 
 print colored("Welcome to SpyChat", 'cyan', attrs=['bold'])
 
-# default spy or new spy
-user = raw_input(colored("you want to continue as default user or create your account : ", "yellow"))
+spies = []
 
-if user == 'default':
-    spy = Spy('Ms.rhythm', 21, 3, 4)
-    # display function in spy_details displays information about spy
-    spy.display_info('Ms.rhythm', 21, 3, 4)
-else:
-    # fetching details from new spy
-    name = raw_input("Enter your spy name: ")
-    if len(name) > 0:
-        salutation = raw_input("what should we call you " + name + " (Mr. or Ms.)? ")
-        name = salutation + "." + name
-        print("Glad to have you here " + name)
-        print("Alright " + name + " We would like to know a little bit more about you...")
 
-        # checking weather age of spy is valid or not
-        age = int(raw_input("what is your age? "))
-        if age < 18 or age > 60:
-            print("sorry! your age is not valid to be a spy")
-            exit()
-        else:
-            experience = int(raw_input("for how many years you are working as a spy? "))
-            rating = float(raw_input("what is your rating(out of 5)? "))
+def load_spy():
+    with open('spy.csv', 'rU') as spy_data:
+        reader = csv.reader(spy_data)
+        for row in reader:
+            try:
+                spy = Spy(name=row[0], password=row[1], age=int(row[2]), experience=int(row[3]), rating=float(row[4]))
+                spies.append(spy)
+            except IndexError:
+                pass
+            continue
+load_spy()
+auth = True
+while auth is True:
+    user = raw_input(colored("enter your choice- \n 1.Login \n 2.Create new account \n 3.Default User \n", "yellow"))
+    if int(user) == 1:
+        username = raw_input("enter your username :")
+        password = raw_input("enter your password:")
+        login = False
+        for i in range(len(spies)):
+            if username == spies[i].name and password == spies[i].password:
+                spy = Spy(spies[i].name, spies[i].password, spies[i].age, spies[i].experience, spies[i].rating)
+                print colored("succesfuly logged in", "green")
+                Spy.display(spy)
+                login = True
+                auth = False
+        if login is False:
+            print colored("wrong user name or password", "red")
+            auth = True
 
-            # comments according to the rating of spy
-            if rating >= 4.5:
-                print("good ace!")
-            elif rating < 4.5 and rating >= 3.5:
-                print("you are one of good ones!")
-            elif rating < 3.5 and rating >= 2.5:
-                print("you can always do better!")
+
+    elif int(user) == 2:
+        # fetching details from new spy
+        name = raw_input("Enter your spy name: ")
+        if len(name) > 0:
+            salutation = raw_input("what should we call you " + name + " (Mr. or Ms.)? ")
+            name = salutation + "." + name
+            print("Glad to have you here " + name)
+            print("Alright " + name + " We would like to know a little bit more about you...")
+
+            # checking weather age of spy is valid or not
+            age = int(raw_input("what is your age? "))
+            if age < 18 or age > 60:
+                print colored("sorry! your age is not valid to be a spy", "red")
+                auth = True
+
             else:
-                print("we can always you somebody to help in the office")
+                experience = int(raw_input("for how many years you are working as a spy? "))
+                rating = float(raw_input("what is your rating(out of 5)? "))
 
-            print("thanks for telling the information about you...")
-            spy = Spy(name, age, experience, rating)
-            # display function in spy_details displays information about spy
-            spy.display_info(name, age, experience, rating)
+                # comments according to the rating of spy
+                if rating >= 4.5:
+                    print("good ace!")
+                elif rating < 4.5 and rating >= 3.5:
+                    print("you are one of good ones!")
+                elif rating < 3.5 and rating >= 2.5:
+                    print("you can always do better!")
+                else:
+                    print("we can always you somebody to help in the office")
+
+                password = raw_input("set your password: ")
+
+                print("thanks for telling the information about you...")
+                spy = Spy(name, password, age, experience, rating)
+                spies.append(spy)
+                # checking if the user is already registered
+                for i in range(len(spies)):
+                    if name == spies[i].name:
+                        print colored("account already exists", "red")
+                        auth = True
+
+                    else:
+                        print colored("account created", "green")
+                        print colored("user name: "+ name +"\npassword:" + password, "green")
+                        Spy.display(spy)
+                        spy = Spy(name, password, age, experience, rating)
+                        spies.append(spy)
+                        with open('spy.csv','a') as spy_data:
+                            writer = csv.writer(spy_data)
+                            writer.writerow([name, password, age, experience, rating])
+                            auth = False
+                        break
+        else:
+            # if enter key is pressed it will be considered as invalid
+            print("please enter a valid name")
+            auth = True
+
+    # for default user
+    elif int(user) == 3:
+        spy = Spy('Ms.Rhythm', 'default', 21, 3, 4)
+        Spy.display(spy)
+        auth = False
+
     else:
-        # if enter key is pressed it will be considered as invalid
-        print("please enter a valid name")
-        exit()
+        print("incorrect input")
+        auth = True
+
 
 
 # ------- start chat -----
@@ -58,7 +114,8 @@ def start_chat():
             reader = csv.reader(friends_data)
             for row in reader:
                 try:
-                    friends.append(Spy(name=row[0], age=int(row[1]), experience=int(row[2]), rating=float(row[3])))
+                    friend = Friend(friend_of=row[0], name=row[1], experience=int(row[2]), rating=float(row[3]))
+                    friends.append(friend)
                 except IndexError:
                     pass
                 continue
