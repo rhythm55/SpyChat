@@ -8,22 +8,18 @@ class Spy:
         self.age = age
         self.experience = experience
         self.rating = rating
-        self.is_online = True
-        self.chats = []
         self.current_status_message = None
+    # to display details of the spy
     def display(spy):
         print colored("%s %d year old with a handful experience of %d years and a rating of %.2f" % (spy.name, spy.age, spy.experience, spy.rating), "blue")
 
-
+# details of friend and name of person who's friend are they
 class Friend:
         def __init__(self, friend_of, name, experience, rating):
             self.friend_of = friend_of
             self.name = name
             self.experience = experience
             self.rating = rating
-
-        # def display_info(self, name, age, experience, rating):
-           # print colored("%s %d year old with a handful experience of %d years and a rating of %.2f" % (name, age, experience, rating),"blue")
 
 # chats between spies
 class ChatMessage:

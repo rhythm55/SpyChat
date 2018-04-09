@@ -3,11 +3,13 @@ import csv
 import menu
 from termcolor import colored
 
+# welcome message for spy
 print colored("Welcome to SpyChat", 'cyan', attrs=['bold'])
 
+# list to store the spies
 spies = []
 
-
+# Load_spy loads the spy details stored in spy.csv
 def load_spy():
     with open('spy.csv', 'rU') as spy_data:
         reader = csv.reader(spy_data)
@@ -19,9 +21,12 @@ def load_spy():
                 pass
             continue
 load_spy()
+
+# auth is authentication it will be true until user is not authenticated successfully
 auth = True
 while auth is True:
     user = raw_input(colored("enter your choice- \n 1.Login \n 2.Create new account \n 3.Default User \n", "yellow"))
+    # for login
     if int(user) == 1:
         username = raw_input("enter your username :")
         password = raw_input("enter your password:")
@@ -29,15 +34,14 @@ while auth is True:
         for i in range(len(spies)):
             if username == spies[i].name and password == spies[i].password:
                 spy = Spy(spies[i].name, spies[i].password, spies[i].age, spies[i].experience, spies[i].rating)
-                print colored("succesfuly logged in", "green")
+                print colored("successfully logged in", "green")
                 Spy.display(spy)
                 login = True
                 auth = False
         if login is False:
             print colored("wrong user name or password", "red")
             auth = True
-
-
+    # for creating new spy account
     elif int(user) == 2:
         # fetching details from new spy
         name = raw_input("Enter your spy name: ")
@@ -52,7 +56,6 @@ while auth is True:
             if age < 18 or age > 60:
                 print colored("sorry! your age is not valid to be a spy", "red")
                 auth = True
-
             else:
                 experience = int(raw_input("for how many years you are working as a spy? "))
                 rating = float(raw_input("what is your rating(out of 5)? "))
@@ -70,20 +73,19 @@ while auth is True:
                 password = raw_input("set your password: ")
 
                 print("thanks for telling the information about you...")
-                spy = Spy(name, password, age, experience, rating)
-                spies.append(spy)
-                # checking if the user is already registered
                 for i in range(len(spies)):
+                    print("for")
+                    # checking if the account already exist with same information
                     if name == spies[i].name:
                         print colored("account already exists", "red")
                         auth = True
-
                     else:
                         print colored("account created", "green")
-                        print colored("user name: "+ name +"\npassword:" + password, "green")
-                        Spy.display(spy)
+                        print colored("user name: " + name + "\npassword:" + password, "green")
+                        # adding spy
                         spy = Spy(name, password, age, experience, rating)
                         spies.append(spy)
+                        Spy.display(spy)
                         with open('spy.csv','a') as spy_data:
                             writer = csv.writer(spy_data)
                             writer.writerow([name, password, age, experience, rating])
@@ -99,16 +101,14 @@ while auth is True:
         spy = Spy('Ms.Rhythm', 'default', 21, 3, 4)
         Spy.display(spy)
         auth = False
-
     else:
         print("incorrect input")
         auth = True
 
 
-
 # ------- start chat -----
 def start_chat():
-    # load_friends() is a function which loads all the friends stored in friends.csv
+    # load_friends is a function which loads all the friends stored in friends.csv
     def load_friends():
         with open('friends.csv', 'rU') as friends_data:
             reader = csv.reader(friends_data)
@@ -136,6 +136,7 @@ def start_chat():
     load_chats()
 
     # Menu of SpyChat
+    # menu will be displayed till show_menu becomes false
     show_menu = True
     while(show_menu):
         print("----- MENU -----")
@@ -143,20 +144,28 @@ def start_chat():
         print colored(" 1.Add a status update \n 2.Add a friend \n 3.Send a secret message \n 4.Read a secret message \n 5.Read chat from a user \n 6.Close application", "yellow")
         menu_choice = int(input("enter your choice: "))
         if menu_choice == 1:
+            # display current status, updates status with new status and displays all previous statuses for selection of current status
+            # add_status function for adding/updating status
             # passed current spy to provide info of current spy
             menu.spy_status(spy)
         elif menu_choice == 2:
+            # check the eligibility of friend and if it is friend is added to the friend list of current spy
             # passed current spy to provide rating of spy
-            e = menu.add_friend(spy)
-            # e stores no of friends of spy
-            print colored("your no of friends: " + str(e), "blue")
+            menu.add_friend(spy)
         elif menu_choice == 3:
+            # it calls select friend which display list of friends of current spy and returns the index of selected friend
+            # encrypts the text in a image using steganography encode
+            # modifies chats.csv to keep record of chat
             # passed current spy to provide rating of spy
             menu.send_a_message(spy)
         elif menu_choice == 4:
+            # it calls select friend which display list of friends of current spy and returns the index of selected friend
+            # decrypts the text in a image using steganography decode
+            # modifies chats.csv to keep record of chat
             # passed current spy to provide rating of spy
             menu.read_a_message(spy)
         elif menu_choice == 5:
+            # display chat of current spy with his/her friend using chats.csv
             # no_chat stores value returned by read_chat if there exist a chat no_chat will be 1
             no_chat = menu.read_chat(spy)
             if no_chat != 1:

@@ -23,8 +23,8 @@ def spy_status(spy):
         else:
             show_menu = False
 
+# add / update current status of spy
 def add_status(current_status_message):
-
     # user already have a status
     if current_status_message != None:
         print colored("your current status message is: " + current_status_message, "magenta")
@@ -63,8 +63,8 @@ def add_status(current_status_message):
     # function will return current message updated from cases accordingly
     return current_status_message
 
+# inputs the friend info ,checks the eligibility of friend and then add him\her to friends list
 def add_friend(spy):
-
     # details of friend
     name = raw_input("enter your friend's name: ")
     salutation = raw_input(name + "'s salutation? ")
@@ -72,7 +72,7 @@ def add_friend(spy):
     age = int(raw_input("age? "))
     experience = int(raw_input("experience ?"))
     rating = float(raw_input("spy rating?"))
-
+    #checks the eligibility
     if len(name) > 0 and age > 12 and age < 65 and rating > spy.rating:
         new_friend = Friend(spy.name, name, experience, rating)
         # friend is appended in friends list
@@ -80,31 +80,44 @@ def add_friend(spy):
         # the spy's friend is added in friends.csv
         with open('friends.csv','a') as friends_data:
             writer = csv.writer(friends_data)
-            writer.writerow([name, age, experience, rating])
+            writer.writerow([spy.name, name, age, experience, rating])
         print colored(name+" added successfully as your friend", "green")
     else:
         print colored("sorry! invalid entry. We can't add spy with details you provided", "red")
-
+    found = False
+    count = 0
+    for f in range(0, len(friends)):
+            if friends[f].friend_of == spy.name:
+                found = True
+                count = count + 1
     # return no of friend spy have
-    return len(friends)
+    if found is True:
+        print colored("your no of friends: " + str(count), "blue")
+    else:
+        print colored("you don't have any friend yet", "red")
 
 # it will select a friend out of list of friends
 def select_a_friend(spy):
     # displaying list of friends of user
     print colored("list of your friends:", "blue")
     item_number = 0
+    # i is used to keep track of index no as all friends of all spies are stored in friends.csv
+    i = []
     # found is used to know if spy has friends currently or not
     found = False
 
     for f in range(0, len(friends)):
-            item_number += 1
+
             if friends[f].friend_of == spy.name:
+                i.append(f)
+                item_number += 1
                 found = True
                 print colored('%d. %s with rating %.2f' % (item_number, friends[f].name, friends[f].rating), "magenta")
+
     if found is True:
         index = int(raw_input(colored("enter serial.no of friend you want to select ", "yellow")))
         # index will store index no of selected friend in friends list
-        return index - 1
+        return index + i[0] - 1
     else:
         print colored("no friends added yet", "red")
         return 0
@@ -113,14 +126,15 @@ def select_a_friend(spy):
 
 special_text = ['SAVE ME', 'DANGER', 'HELP ME', 'SOS']
 # if words in special_text list are used during send message a special message is sent to receiver
-# if words in spcial_text list are while reading a message a special message output is displayed
+# if words in special_text list are while reading a message a special message output is displayed
 
 def send_a_message(spy):
     show_menu = True
     while show_menu:
         print colored("which friend you want to communicate with?", "yellow")
         index = select_a_friend(spy)
-        if index == 0:
+        # checks if user has a friend or not
+        if index < 0:
             show_menu = False
         else:
             selected_friend = friends[index].name
@@ -150,12 +164,14 @@ def send_a_message(spy):
             else:
                 print colored("file does not exist", "red")
 
+# reads the secret text encoded in the image
 def read_a_message(spy):
     show_menu = True
     while show_menu:
         print colored("which friend you want to communicate with?", "yellow")
+        # checks if user has a friend or not
         index = select_a_friend(spy)
-        if index == 0:
+        if index < 0:
             show_menu = False
         else:
             sender = friends[index].name
@@ -189,10 +205,10 @@ def read_chat(spy):
     while show_menu:
         print colored("which friend you want to communicate with?", "yellow")
         index = select_a_friend(spy)
-        if index == 0:
+        # checks if user has a friend or not
+        if index < 0:
             show_menu = False
         else:
-            index = friends[index].name
             selected_friend = friends[index].name
             print colored("with which friend you want to read chat?", "yellow")
             # reading chats from chats.csv
@@ -201,6 +217,7 @@ def read_chat(spy):
                 for row in reader:
                     try:
                         c = ChatMessage(sent_by_me=row[0], friend_name=row[1], time=row[2], message=row[3])
+                        # print (c.sent_by_me+" "+ c.friend_name)
                         # checking the chats of the current spy with selected friend
                         # print c.sent_by_me
                         if c.sent_by_me and c.friend_name == selected_friend:
