@@ -101,23 +101,21 @@ def select_a_friend(spy):
     # displaying list of friends of user
     print colored("list of your friends:", "blue")
     item_number = 0
-    # i is used to keep track of index no as all friends of all spies are stored in friends.csv
-    i = []
     # found is used to know if spy has friends currently or not
     found = False
 
     for f in range(0, len(friends)):
-
-            if friends[f].friend_of == spy.name:
-                i.append(f)
-                item_number += 1
-                found = True
-                print colored('%d. %s with rating %.2f' % (item_number, friends[f].name, friends[f].rating), "magenta")
+        item_number += 1
+        found = True
+        print colored('%d. %s with rating %.2f' % (item_number, friends[f].name, friends[f].rating), "magenta")
 
     if found is True:
         index = int(raw_input(colored("enter serial.no of friend you want to select ", "yellow")))
         # index will store index no of selected friend in friends list
-        return index + i[0] - 1
+        if index > len(friends):      #condition will check for invalid input
+            print colored("invalid input", "red")
+        else:
+            return index - 1
     else:
         print colored("no friends added yet", "red")
         return 0
@@ -151,7 +149,7 @@ def send_a_message(spy):
                     # encode method of Steganography library will hide secrete message in selected image
                     Steganography.encode(original_image, output_path, text)
                     # storing chats in chatmessage
-                    chat = ChatMessage(sent_by_me=True, friend_name=selected_friend, time=datetime.now().strftime("%d %B %Y"), message=text)
+                    chat = ChatMessage(sent_by_me=spy.name, friend_name=selected_friend, time=datetime.now().strftime("%d %B %Y"), message=text)
                     chats.append(chat)
                     # writing chats in chats.csv
                     with open("chats.csv", 'a') as chat_record:
@@ -187,7 +185,7 @@ def read_a_message(spy):
                     if text in special_text:
                         print colored("don't worry " + sender + "on the way to rescue you!!!", "green", attrs=['bold'])
                     # storing chats in chatmessage
-                    chat = ChatMessage(sent_by_me=False, friend_name=sender, time=datetime.now().strftime("%d %B %Y"), message=text)
+                    chat = ChatMessage(sent_by_me=spy.name, friend_name=sender, time=datetime.now().strftime("%d %B %Y"), message=text)
                     chats.append(chat)
                     # writing chats in chats.csv
                     with open("chats.csv", 'a') as chat_record:
@@ -201,8 +199,7 @@ def read_a_message(spy):
 
 # it will display chats of the current spy with his/her friend
 def read_chat(spy):
-    show_menu = True
-    while show_menu:
+
         print colored("which friend you want to communicate with?", "yellow")
         index = select_a_friend(spy)
         # checks if user has a friend or not
@@ -210,18 +207,14 @@ def read_chat(spy):
             show_menu = False
         else:
             selected_friend = friends[index].name
-            print colored("with which friend you want to read chat?", "yellow")
             # reading chats from chats.csv
             with open("chats.csv", 'rU') as chat:
                 reader = csv.reader(chat)
                 for row in reader:
                     try:
                         c = ChatMessage(sent_by_me=row[0], friend_name=row[1], time=row[2], message=row[3])
-                        # print (c.sent_by_me+" "+ c.friend_name)
-                        # checking the chats of the current spy with selected friend
-                        # print c.sent_by_me
-                        if c.sent_by_me and c.friend_name == selected_friend:
-                            print colored("You sent message to %s on [%s] : %s" % (selected_friend, c.time, c.message), "blue")
+                        if c.sent_by_me == spy.name and c.friend_name == selected_friend:
+                            print "You sent message to :" + colored( '%s ', 'magenta')%selected_friend + "on"+colored('[%s]', 'blue')%c.time + colored(': %s', 'green')%c.message
                             return 1
                     except IndexError:
                         pass

@@ -1,4 +1,4 @@
-from spy_details import Spy,friends, ChatMessage,chats,Friend
+from spy_details import Spy, friends, ChatMessage, chats, Friend
 import csv
 import menu
 from termcolor import colored
@@ -73,8 +73,7 @@ while auth is True:
                 password = raw_input("set your password: ")
 
                 print("thanks for telling the information about you...")
-                for i in range(len(spies)):
-                    print("for")
+                for i in range(0, len(spies)):
                     # checking if the account already exist with same information
                     if name == spies[i].name:
                         print colored("account already exists", "red")
@@ -141,7 +140,7 @@ def start_chat():
     while(show_menu):
         print("----- MENU -----")
         # menu_choices:
-        print colored(" 1.Add a status update \n 2.Add a friend \n 3.Send a secret message \n 4.Read a secret message \n 5.Read chat from a user \n 6.Close application", "yellow")
+        print colored(" 1.Add a status update \n 2.Add a friend \n 3.Send a secret message \n 4.Read a secret message \n 5.Read chat from a user \n 6.View profile \n 7.Close application", "yellow")
         menu_choice = int(input("enter your choice: "))
         if menu_choice == 1:
             # display current status, updates status with new status and displays all previous statuses for selection of current status
@@ -170,7 +169,11 @@ def start_chat():
             no_chat = menu.read_chat(spy)
             if no_chat != 1:
                 print colored("no messages exchanged yet", "red")
-        if menu_choice == 6:
+        elif menu_choice == 6:
+            # displays the profile information about the spy
+            print colored("Your profile:", "magenta", attrs=['bold'])
+            print colored(" name: %s           age: %d \n rating: %.2f              experience: %d \n Status: %s \n No of friends: %d"%(spy.name, spy.age, spy.rating, spy.experience, spy.current_status_message, len(friends)), "blue")
+        if menu_choice == 7:
             # when show_menu value become false it will exit from while loop
             show_menu = False
 
